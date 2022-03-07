@@ -1,11 +1,33 @@
 {
+  "name": "urlshortener",
+  "description": "project url shortener // bitly like application",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FDgajju/urlShortener.git"
+  },
+  "author": "gajendra sahu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FDgajju/urlShortener/issues"
+  },
+  "homepage": "https://github.com/FDgajju/urlShortener#readme",
   "dependencies": {
     "body-parser": "^1.19.1",
+    "dotenv": "^16.0.0",
     "express": "^4.17.1",
     "mongoose": "^6.1.2",
+    "morgan": "^1.10.0",
     "redis": "3.1",
     "shortid": "^2.2.16",
     "util": "^0.12.4",
     "valid-url": "^1.0.9"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
   }
 }
