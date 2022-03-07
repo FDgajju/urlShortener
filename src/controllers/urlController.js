@@ -113,22 +113,22 @@ const createUrl = async function (req, res) {
 //This is my Second Get API to redirect from short url to Corresponding Long url
 const getUrl = async function (req, res) {
     try {
-        let urlCode1 = req.params.urlCode;
+        let { urlCode } = req.params;
         // console.log(urlCode1)
 
-        const getAsync = await GET_ASYNC(`${urlCode1}`);
+        const getAsync = await GET_ASYNC(`${urlCode}`);
         if (getAsync) {
             const parseData = JSON.parse(getAsync);
             console.log("Data Fetch");
-            //console.log(typeof urlCode1)
+            //console.log(typeof urlCode)
             return res.redirect(parseData.longUrl);
-        } else if (urlCode1) {
+        } else if (urlCode) {
             // console.log(url)
-            const urlFind = await urlModel.findOne({ urlCode: urlCode1 });
+            const urlFind = await urlModel.findOne({ urlCode: urlCode });
             //console.log(urlFind)
             if (urlFind) {
                 const storeCacheData = await SET_ASYNC(
-                    `${urlCode1}`,
+                    `${urlCode}`,
                     JSON.stringify(urlFind),
                     "EX",
                     20
