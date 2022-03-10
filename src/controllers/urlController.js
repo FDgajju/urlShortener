@@ -1,7 +1,8 @@
-const shortid = require("shortid");
+const { codeGen } = require("./codeGen")
 const redis = require("redis");
 const { promisify } = require("util");
 const validUrl = require("valid-url");
+// const shortid = require("shortid");
 
 const urlModel = require("../models/urlModel");
 const baseUrl = "http://localhost:3000";
@@ -86,7 +87,8 @@ const createUrl = async function (req, res) {
         } // url validation
 
         if (validUrl.isUri(longUrl)) {
-            const urlToken = shortid.generate();
+            // const urlToken = shortid.generate();
+            const urlToken = codeGen(10);
             let checkUrl = await urlModel.findOne({ longUrl: longUrl });
             if (checkUrl) {
                 return res.send({
