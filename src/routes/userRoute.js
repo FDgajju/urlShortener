@@ -1,7 +1,7 @@
 import { Router } from 'express';
 const router = Router();
 
-import {createProfile, logIn} from '../controllers/userController.js';
+import { createProfile, logIn } from '../controllers/userController.js';
 
 // endpoint - /user
 router.route('/sign-in').post(createProfile);

@@ -1,9 +1,9 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const userModel = new mongoose.Schema({
   fullName: {
     type: String,
-    required: [true, "firstName is mandatory"],
+    required: [true, 'firstName is mandatory'],
   },
 
   email: {
@@ -21,16 +21,16 @@ const userModel = new mongoose.Schema({
 
   userName: {
     type: String,
-    unique: [true, "user must be unique"],
-    required: [true, "userName is required"],
+    unique: [true, 'user must be unique'],
+    required: [true, 'userName is required'],
   },
 
   userVerified: {
     type: Boolean,
-    default: false
+    default: false,
   },
 
-  verificationCode: String
+  verificationCode: String,
 });
 
-export default mongoose.model("user", userModel)
+export default mongoose.model('user', userModel);

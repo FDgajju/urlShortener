@@ -18,8 +18,7 @@ async function sendVerifyMail(userMail, code) {
   };
 
   transporter.sendMail(data, (err, info) => {
-    if (err)
-      return res.status(400).send({ status: false, message: err.message });
+    if (err) return res.status(400).send({ status: false, message: err.message });
 
     res.status(200).send({
       status: 'Mail send 👍️',

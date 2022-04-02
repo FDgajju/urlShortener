@@ -1,17 +1,17 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const urlSchema = new mongoose.Schema(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      required: [true, "userId is mandatory filled"],
+      required: [true, 'userId is mandatory filled'],
     },
 
     urlCode: {
       type: String,
       unique: true,
       lowercase: true,
-      required: "Enter a Short code",
+      required: 'Enter a Short code',
       trim: true,
     },
 
@@ -29,4 +29,4 @@ const urlSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("urlShorten", urlSchema);
+export default mongoose.model('urlShorten', urlSchema);

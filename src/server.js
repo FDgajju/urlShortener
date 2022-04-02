@@ -7,7 +7,7 @@ import app from './index.js';
 dotEnv.config();
 
 const DB = process.env.DATABASE || 'mongodb://localhost:27017/urlShort';
-console.log(DB)
+console.log(DB);
 //connect to mongoose
 mongoose
   .connect(DB, { useNewUrlParser: true })

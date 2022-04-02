@@ -12,9 +12,7 @@ async function createProfile(req, res) {
     const { fullName, email, password, userName } = body;
 
     if (!isValidBody(body)) {
-      return res
-        .status(400)
-        .send({ status: 'Invalid', message: 'please fill the from' });
+      return res.status(400).send({ status: 'Invalid', message: 'please fill the from' });
     }
 
     if (!isValid(fullName)) {
@@ -91,9 +89,7 @@ async function createProfile(req, res) {
       message: 'please check your email to verify your sort Url account',
     });
   } catch (err) {
-    res
-      .status(500)
-      .send({ message: `something wrong from our-end ${err.message}` });
+    res.status(500).send({ message: `something wrong from our-end ${err.message}` });
   }
 }
 
@@ -103,9 +99,7 @@ async function logIn(req, res) {
     const { email, password } = body;
 
     if (!isValidBody(body)) {
-      return res
-        .status(400)
-        .send({ status: 'invalid', message: 'invalid data' });
+      return res.status(400).send({ status: 'invalid', message: 'invalid data' });
     }
 
     if (!isValidEmail(email)) {
@@ -116,24 +110,16 @@ async function logIn(req, res) {
     }
 
     if (!isValid(email)) {
-      return res
-        .status(400)
-        .send({ status: 'Invalid!', message: 'email filled is required!.' });
+      return res.status(400).send({ status: 'Invalid!', message: 'email filled is required!.' });
     }
 
     if (!isValid(password)) {
-      return res
-        .status(400)
-        .send({ status: 'Invalid!', message: 'password filled is required!.' });
+      return res.status(400).send({ status: 'Invalid!', message: 'password filled is required!.' });
     }
 
     // find user #DB CALL
     const user = await userModel.findOne({
-      $or: [
-        { email: email, password: password },
-        { email: email },
-        { password: password },
-      ],
+      $or: [{ email: email, password: password }, { email: email }, { password: password }],
     });
 
     //if not get
@@ -162,7 +148,7 @@ async function logIn(req, res) {
     res.status(200).send({
       status: 'login success',
       message: `user ${user.fullName} successfully logged in`,
-      token: token
+      token: token,
     });
   } catch (error) {
     res.status(500).send({

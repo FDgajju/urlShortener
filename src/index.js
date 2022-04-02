@@ -6,7 +6,8 @@ import morgan from 'morgan';
 import shortUrlRoute from './routes/urlShortRoute.js';
 import userRoute from './routes/userRoute.js';
 import verifyRoute from './routes/verifyRoute.js';
-const app = express ();
+import redirectRoute from './routes/redirectRoute.js';
+const app = express();
 
 // global middleWares
 app.use(morgan('dev'));
@@ -15,6 +16,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 //routes
 app.use('/', shortUrlRoute);
+app.use('/', redirectRoute);
 app.use('/user', userRoute);
 app.use('/verify', verifyRoute);
 
