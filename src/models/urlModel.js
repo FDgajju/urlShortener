@@ -7,6 +7,11 @@ const urlSchema = new mongoose.Schema(
       required: [true, 'userId is mandatory filled'],
     },
 
+    title: {
+      type: String,
+      required: "url title required"
+    },
+
     urlCode: {
       type: String,
       unique: true,

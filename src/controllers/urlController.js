@@ -1,5 +1,6 @@
 import { codeGen } from '../utils/codeGen.js';
 import validUrl from 'valid-url';
+import { isValidId, isValid } from '../utils/validations.js';
 // const shortid = require("shortid");
 
 import userModel from '../models/userModel.js';
@@ -33,15 +34,25 @@ const createUrl = async function (req, res) {
       });
     }
 
-    const longUrl = body.longUrl.trim();
+    const { longUrl, title } = req.body;
+
+    if (!isValid(title)) {
+      return res.status(400).send({ status: false, message: 'enter title for url !' });
+    }
+
+    if (!isValid(longUrl)) {
+      return res.status(400).send({ status: false, message: 'enter your long url !' });
+    }
 
     if (validUrl.isUri(longUrl)) {
       // const urlToken = shortid.generate();
       const urlToken = codeGen(5);
-      let checkUrl = await urlModel.findOne({
-        userId: userId,
-        longUrl: longUrl,
-      });
+      let checkUrl = await urlModel
+        .findOne({
+          userId: userId,
+          longUrl: longUrl,
+        })
+        .select({ title: 1, shortUrl: 1, _id: 0 });
 
       if (checkUrl) {
         return res.send({
@@ -52,6 +63,7 @@ const createUrl = async function (req, res) {
         const shortUrl = baseUrl + '/' + urlToken;
 
         const storedData = {
+          title,
           longUrl,
           shortUrl,
           urlCode: urlToken,
@@ -59,7 +71,12 @@ const createUrl = async function (req, res) {
         };
 
         let savedData = await urlModel.create(storedData);
-        return res.status(200).send({ status: true, data: savedData });
+        const returnData = {
+          userName: user.userName,
+          title: savedData.title,
+          shortUrl: savedData.shortUrl,
+        };
+        return res.status(200).send({ status: true, data: returnData });
       }
     } else {
       return res.status(400).send({ status: false, message: 'Invalid Long Url' });
@@ -69,6 +86,47 @@ const createUrl = async function (req, res) {
   }
 };
 
-//redirect Api
+async function getAllShortUrls(req, res) {
+  try {
+    const { params, decode } = req;
 
-export { createUrl };
+    if (isValidId(params.userId)) {
+      return res.status(400).send({ status: 'invalid', message: 'invalid userID!' });
+    }
+
+    console.log(params.userId);
+    const user = await userModel
+      .findOne({ _id: params.userId })
+      .select({ _id: 0, password: 0, __v: 0, userVerified: 0 });
+
+    // console.log(user)
+
+    if (!user) {
+      return res.status(400).send({ status: false, message: 'user dose not exist' });
+    }
+
+    if (user.userVerified === false) {
+      return res.status(400).send({ status: false, message: 'user not verified' });
+    }
+
+    console.log(decode._id, params.userId);
+    if (decode._id !== params.userId) {
+      return res.status(403).send({ status: 'unauthorized', message: 'please login again!' });
+    }
+
+    const urls = await urlModel
+      .find({ userId: params.userId })
+      .select({ title: 1, shortUrl: 1, _id: 0 });
+
+    console.log(urls);
+    let userData = JSON.parse(JSON.stringify(user));
+    userData['urls'] = urls.length === 0 ? 'you not generated any short url ' : urls;
+
+    res.status(200).send({ status: 'fetched', data: userData });
+  } catch (error) {
+    res.status(500).send({ status: false, message: 'something wrong from our end!' });
+    throw new Error(error.message);
+  }
+}
+
+export { createUrl, getAllShortUrls };
