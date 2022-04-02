@@ -1,14 +1,21 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const morgan = require("morgan");
+import express from 'express';
 
-const route = require("./routes/route");
-const app = express();
+import bodyParser from 'body-parser';
+import morgan from 'morgan';
+
+import shortUrlRoute from './routes/urlShortRoute.js';
+import userRoute from './routes/userRoute.js';
+import verifyRoute from './routes/verifyRoute.js';
+const app = express ();
 
 // global middleWares
-app.use(morgan("dev"))
+app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use("/", route);
 
-module.exports = app;
+//routes
+app.use('/', shortUrlRoute);
+app.use('/user', userRoute);
+app.use('/verify', verifyRoute);
+
+export default app;

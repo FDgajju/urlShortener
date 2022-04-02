@@ -1,25 +1,32 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
-const urlSchema = new mongoose.Schema({
+const urlSchema = new mongoose.Schema(
+  {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: [true, "userId is mandatory filled"],
+    },
+
     urlCode: {
-        type: String,
-        unique: true,
-        lowercase: true,
-        required: 'Enter a Short code',
-        trim: true,
+      type: String,
+      unique: true,
+      lowercase: true,
+      required: "Enter a Short code",
+      trim: true,
     },
 
     longUrl: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
 
     shortUrl: {
-        type: String,
-        required: true,
-        unique: true,
+      type: String,
+      required: true,
+      unique: true,
     },
-}, { timestamps: true })
+  },
+  { timestamps: true }
+);
 
-
-module.exports = mongoose.model('urlShorten', urlSchema)
+export default mongoose.model("urlShorten", urlSchema);
