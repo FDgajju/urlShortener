@@ -117,10 +117,12 @@ async function getAllShortUrls(req, res) {
 			.find({ userId: params.userId })
 			.select({ title: 1, shortUrl: 1, _id: 0 });
 
-		let userData = JSON.parse(JSON.stringify(user));
-		userData['urls'] = urls.length === 0 ? 'you not generated any short url ' : urls;
+			const result = urls.length === 0? "no url created yes!": urls
 
-		res.status(200).send({ status: 'fetched', data: userData });
+		// let userData = JSON.parse(JSON.stringify(user));
+		// userData['urls'] = urls.length === 0 ? 'you not generated any short url ' : urls;
+
+		res.status(200).send({ status: 'fetched',shortedUrls: result });
 	} catch (error) {
 		res.status(500).send({ status: false, message: 'something wrong from our end!' });
 		throw new Error(error.message);

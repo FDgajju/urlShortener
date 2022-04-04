@@ -1,3 +1,4 @@
+import bcrypt from 'bcrypt';
 import genToken from '../utils/genToken.js';
 import userModel from '../models/userModel.js';
 import sendVerifyMail from '../utils/sendMail.js';
@@ -80,6 +81,7 @@ async function createProfile(req, res) {
 			});
 		}
 
+		body['password'] = await bcrypt.hash(password, 10);
 		body['verificationCode'] = mailCode();
 		await sendVerifyMail(email, body['verificationCode']);
 
@@ -95,6 +97,7 @@ async function createProfile(req, res) {
 	}
 }
 
+//login api
 async function logIn(req, res) {
 	try {
 		const { body } = req;
@@ -125,10 +128,7 @@ async function logIn(req, res) {
 			});
 		}
 
-		// find user #DB CALL
-		const user = await userModel.findOne({
-			$or: [{ email: email, password: password }, { email: email }, { password: password }],
-		});
+		const user = await userModel.findOne({ email: email });
 
 		//if not get
 		if (!user) {
@@ -139,19 +139,16 @@ async function logIn(req, res) {
 			});
 		}
 
-		if (user.password != password) {
+		const checkPassword = await bcrypt.compare(password, user.password);
+
+		if (!checkPassword) {
 			return res.status(401).send({
 				status: 'Unauthorized',
-				message: 'you enter wrong password',
-			});
-		} else if (user.email != email) {
-			return res.status(401).send({
-				status: 'Unauthorized',
-				message: 'you enter wrong email',
+				message: 'please check your Credentials',
 			});
 		}
 
-		const payload = { _id: user._id, email: email, password: password };
+		const payload = { _id: user._id, email: email };
 		const token = genToken(payload);
 		res.status(200).send({
 			status: 'login success',

@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import dotEnv from 'dotenv';
 import redis from 'redis';
 import { promisify } from 'util';
-import app from './index.js';
+import app from './app.js';
 
 dotEnv.config();
 
